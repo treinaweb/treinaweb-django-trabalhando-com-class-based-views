@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ page_title }}</h1>
+
+  <p><strong>Título:</strong> {{ project.title }}</p>
+  <p><strong>Descrição:</strong> {{ project.description }}</p>
+  <p><strong>Data de início:</strong> {{ project.start_date }}</p>
+  <p><strong>Data de término:</strong> {{ project.end_date }}</p>
+  <p><strong>Cliente:</strong> {{ project.client }}</p>
+  <p><strong>Responsável:</strong> {{ project.responsible }}</p>
+  <p><strong>Orçamento:</strong> R$ {{ project.budget }}</p>
+  <p><strong>Gastos:</strong> R$ {{ project.spent }}</p>
+
+  <a href="{% url 'projects:update_project' pk=project.pk %}" class="btn btn-primary">Editar</a>
+  <a href="{% url 'projects:delete_project' pk=project.pk %}" class="btn btn-danger">Deletar</a>
+{% endblock %}
