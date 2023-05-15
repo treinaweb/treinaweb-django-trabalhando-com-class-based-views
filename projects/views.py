@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import View
 
 from .models import Project
 from .forms import ProjectForm
@@ -12,16 +13,24 @@ def list_projects(request):
     )
 
 
-def create_project(request):
-    form = ProjectForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect("projects:list_projects")
-    return render(
-        request,
-        "projects/form_project.html",
-        {"page_title": "Criar Projeto", "form": form},
-    )
+class CreateProjectView(View):
+    def get(self, request):
+        return render(
+            request,
+            "projects/form_project.html",
+            {"page_title": "Criar Projeto", "form": ProjectForm()},
+        )
+
+    def post(self, request):
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("projects:list_projects")
+        return render(
+            request,
+            "projects/form_project.html",
+            {"page_title": "Criar Project", "form": form},
+        )
 
 
 def update_project(request, pk):
