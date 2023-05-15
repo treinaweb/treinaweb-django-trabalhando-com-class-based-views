@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, ListView, CreateView
+from django.views.generic import View, ListView, CreateView, UpdateView
 from django.urls import reverse_lazy
 
 from .models import Project
@@ -15,26 +15,6 @@ class ProjectListView(ListView):
         return context
 
 
-class CreateProjectView(View):
-    def get(self, request):
-        return render(
-            request,
-            "projects/form_project.html",
-            {"page_title": "Criar Projeto", "form": ProjectForm()},
-        )
-
-    def post(self, request):
-        form = ProjectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("projects:list_projects")
-        return render(
-            request,
-            "projects/form_project.html",
-            {"page_title": "Criar Project", "form": form},
-        )
-
-
 class ProjectCreateView(CreateView):
     model = Project
     fields = "__all__"
@@ -46,17 +26,15 @@ class ProjectCreateView(CreateView):
         return context
 
 
-def update_project(request, pk):
-    project = get_object_or_404(Project, pk=pk)
-    form = ProjectForm(request.POST or None, instance=project)
-    if form.is_valid():
-        form.save()
-        return redirect("projects:list_projects")
-    return render(
-        request,
-        "projects/form_project.html",
-        {"page_title": "Editar Projeto", "form": form},
-    )
+class ProjectUpdateView(UpdateView):
+    model = Project
+    fields = "__all__"
+    success_url = reverse_lazy("projects:list_projects")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Editar Projeto"
+        return context
 
 
 def delete_project(request, pk):
