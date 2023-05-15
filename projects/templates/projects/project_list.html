@@ -3,7 +3,7 @@
 {% block content %}
   <h1>{{ page_title }}</h1>
 
-  {% if projects %}
+  {% if project_list %}
     <table class="table">
       <thead>
         <tr>
@@ -16,7 +16,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for project in projects %}
+        {% for project in project_list %}
           <tr>
             <td>{{ project.title }}</td>
             <td>{{ project.start_date }}</td>

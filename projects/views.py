@@ -1,16 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View
+from django.views.generic import View, ListView
 
 from .models import Project
 from .forms import ProjectForm
 
 
-def list_projects(request):
-    return render(
-        request,
-        "projects/list_projects.html",
-        {"projects": Project.objects.all(), "page_title": "Lista de Projetos"},
-    )
+class ProjectListView(ListView):
+    model = Project
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Lista de Projetos"
+        return context
 
 
 class CreateProjectView(View):
