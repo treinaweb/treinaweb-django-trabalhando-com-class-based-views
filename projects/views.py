@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.urls import reverse_lazy
 
 from .models import Project
-from .forms import ProjectForm
 
 
 class ProjectListView(ListView):
@@ -49,10 +48,10 @@ def delete_project(request, pk):
     )
 
 
-def project_details(request, pk):
-    project = get_object_or_404(Project, pk=pk)
-    return render(
-        request,
-        "projects/project_details.html",
-        {"page_title": "Detalhes do Projeto", "project": project},
-    )
+class PorjectDetailView(DetailView):
+    model = Project
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Detalhes do Projeto"
+        return context
