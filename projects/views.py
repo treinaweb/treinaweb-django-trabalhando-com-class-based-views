@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, CreateView
+from django.urls import reverse_lazy
 
 from .models import Project
 from .forms import ProjectForm
@@ -32,6 +33,17 @@ class CreateProjectView(View):
             "projects/form_project.html",
             {"page_title": "Criar Project", "form": form},
         )
+
+
+class ProjectCreateView(CreateView):
+    model = Project
+    fields = "__all__"
+    success_url = reverse_lazy("projects:list_projects")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Criar Projeto"
+        return context
 
 
 def update_project(request, pk):
